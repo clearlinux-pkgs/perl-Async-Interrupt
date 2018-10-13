@@ -4,18 +4,16 @@
 #
 Name     : perl-Async-Interrupt
 Version  : 1.24
-Release  : 1
+Release  : 2
 URL      : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.24.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.24.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/liba/libasync-interrupt-perl/libasync-interrupt-perl_1.24-1.debian.tar.xz
 Summary  : unknown
 Group    : Development/Tools
 License  : Artistic-1.0 BSD-2-Clause GPL-1.0 GPL-2.0
-Requires: perl-Async-Interrupt-lib
-Requires: perl-Async-Interrupt-license
-Requires: perl-Async-Interrupt-man
-Requires: perl(Canary::Stability)
-Requires: perl(common::sense)
+Requires: perl-Async-Interrupt-lib = %{version}-%{release}
+Requires: perl-Async-Interrupt-license = %{version}-%{release}
+BuildRequires : buildreq-cpan
 BuildRequires : perl(Canary::Stability)
 BuildRequires : perl(common::sense)
 
@@ -25,10 +23,20 @@ Async::Interrupt - allow C/XS libraries to interrupt perl asynchronously
 SYNOPSIS
 use Async::Interrupt;
 
+%package dev
+Summary: dev components for the perl-Async-Interrupt package.
+Group: Development
+Requires: perl-Async-Interrupt-lib = %{version}-%{release}
+Provides: perl-Async-Interrupt-devel = %{version}-%{release}
+
+%description dev
+dev components for the perl-Async-Interrupt package.
+
+
 %package lib
 Summary: lib components for the perl-Async-Interrupt package.
 Group: Libraries
-Requires: perl-Async-Interrupt-license
+Requires: perl-Async-Interrupt-license = %{version}-%{release}
 
 %description lib
 lib components for the perl-Async-Interrupt package.
@@ -42,19 +50,11 @@ Group: Default
 license components for the perl-Async-Interrupt package.
 
 
-%package man
-Summary: man components for the perl-Async-Interrupt package.
-Group: Default
-
-%description man
-man components for the perl-Async-Interrupt package.
-
-
 %prep
-tar -xf %{SOURCE1}
-cd ..
 %setup -q -n Async-Interrupt-1.24
-mkdir -p %{_topdir}/BUILD/Async-Interrupt-1.24/deblicense/
+cd ..
+%setup -q -T -D -n Async-Interrupt-1.24 -b 1
+mkdir -p deblicense/
 mv %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/Async-Interrupt-1.24/deblicense/
 
 %build
@@ -79,13 +79,13 @@ make TEST_VERBOSE=1 test
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/perl-Async-Interrupt
-cp COPYING %{buildroot}/usr/share/doc/perl-Async-Interrupt/COPYING
-cp deblicense/copyright %{buildroot}/usr/share/doc/perl-Async-Interrupt/deblicense_copyright
+mkdir -p %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt
+cp COPYING %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/COPYING
+cp deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/deblicense_copyright
 if test -f Makefile.PL; then
-make pure_install PERL_INSTALL_ROOT=%{buildroot}
+make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
-./Build install --installdirs=site --destdir=%{buildroot}
+./Build install --installdirs=vendor --destdir=%{buildroot}
 fi
 find %{buildroot} -type f -name .packlist -exec rm -f {} ';'
 find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null ';'
@@ -94,17 +94,17 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/perl5/site_perl/5.26.1/x86_64-linux-thread-multi/Async/Interrupt.pm
+/usr/lib/perl5/vendor_perl/5.26.1/x86_64-linux-thread-multi/Async/Interrupt.pm
+
+%files dev
+%defattr(-,root,root,-)
+/usr/share/man/man3/Async::Interrupt.3
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib/perl5/site_perl/5.26.1/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
+/usr/lib/perl5/vendor_perl/5.26.1/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/perl-Async-Interrupt/COPYING
-/usr/share/doc/perl-Async-Interrupt/deblicense_copyright
-
-%files man
-%defattr(-,root,root,-)
-/usr/share/man/man3/Async::Interrupt.3
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/perl-Async-Interrupt/COPYING
+/usr/share/package-licenses/perl-Async-Interrupt/deblicense_copyright
