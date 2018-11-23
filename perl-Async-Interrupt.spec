@@ -4,7 +4,7 @@
 #
 Name     : perl-Async-Interrupt
 Version  : 1.24
-Release  : 2
+Release  : 3
 URL      : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.24.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.24.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/liba/libasync-interrupt-perl/libasync-interrupt-perl_1.24-1.debian.tar.xz
@@ -94,7 +94,7 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.26.1/x86_64-linux-thread-multi/Async/Interrupt.pm
+/usr/lib/perl5/vendor_perl/5.28.0/x86_64-linux-thread-multi/Async/Interrupt.pm
 
 %files dev
 %defattr(-,root,root,-)
@@ -102,7 +102,7 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.26.1/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
+/usr/lib/perl5/vendor_perl/5.28.0/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
 
 %files license
 %defattr(0644,root,root,0755)
