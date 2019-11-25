@@ -4,15 +4,15 @@
 #
 Name     : perl-Async-Interrupt
 Version  : 1.25
-Release  : 10
+Release  : 11
 URL      : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.25.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.25.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/liba/libasync-interrupt-perl/libasync-interrupt-perl_1.24-1.debian.tar.xz
-Summary  : allow C/XS libraries to interrupt perl asynchronously
+Summary  : unknown
 Group    : Development/Tools
 License  : Artistic-1.0 BSD-2-Clause GPL-1.0 GPL-2.0
-Requires: perl-Async-Interrupt-lib = %{version}-%{release}
 Requires: perl-Async-Interrupt-license = %{version}-%{release}
+Requires: perl-Async-Interrupt-perl = %{version}-%{release}
 BuildRequires : buildreq-cpan
 BuildRequires : perl(Canary::Stability)
 BuildRequires : perl(common::sense)
@@ -26,21 +26,11 @@ use Async::Interrupt;
 %package dev
 Summary: dev components for the perl-Async-Interrupt package.
 Group: Development
-Requires: perl-Async-Interrupt-lib = %{version}-%{release}
 Provides: perl-Async-Interrupt-devel = %{version}-%{release}
 Requires: perl-Async-Interrupt = %{version}-%{release}
 
 %description dev
 dev components for the perl-Async-Interrupt package.
-
-
-%package lib
-Summary: lib components for the perl-Async-Interrupt package.
-Group: Libraries
-Requires: perl-Async-Interrupt-license = %{version}-%{release}
-
-%description lib
-lib components for the perl-Async-Interrupt package.
 
 
 %package license
@@ -51,18 +41,31 @@ Group: Default
 license components for the perl-Async-Interrupt package.
 
 
+%package perl
+Summary: perl components for the perl-Async-Interrupt package.
+Group: Default
+Requires: perl-Async-Interrupt = %{version}-%{release}
+
+%description perl
+perl components for the perl-Async-Interrupt package.
+
+
 %prep
 %setup -q -n Async-Interrupt-1.25
-cd ..
-%setup -q -T -D -n Async-Interrupt-1.25 -b 1
+cd %{_builddir}
+tar xf %{_sourcedir}/libasync-interrupt-perl_1.24-1.debian.tar.xz
+cd %{_builddir}/Async-Interrupt-1.25
 mkdir -p deblicense/
-cp -r %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/Async-Interrupt-1.25/deblicense/
+cp -r %{_builddir}/debian/* %{_builddir}/Async-Interrupt-1.25/deblicense/
 
 %build
+## build_prepend content
+export PERL_CANARY_STABILITY_NOPROMPT=1
+## build_prepend end
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
+export LANG=C.UTF-8
 if test -f Makefile.PL; then
 %{__perl} Makefile.PL
 make  %{?_smp_mflags}
@@ -72,7 +75,7 @@ else
 fi
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
@@ -81,8 +84,8 @@ make TEST_VERBOSE=1 test
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt
-cp COPYING %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/COPYING
-cp deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/deblicense_copyright
+cp %{_builddir}/Async-Interrupt-1.25/COPYING %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/9a56f3b919dfc8fced3803e165a2e38de62646e5
+cp %{_builddir}/Async-Interrupt-1.25/deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/619cb1524f067eb222c60e4e1513035e67e1a874
 if test -f Makefile.PL; then
 make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
@@ -95,17 +98,17 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.28.2/x86_64-linux-thread-multi/Async/Interrupt.pm
 
 %files dev
 %defattr(-,root,root,-)
 /usr/share/man/man3/Async::Interrupt.3
 
-%files lib
-%defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.28.2/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
-
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/perl-Async-Interrupt/COPYING
-/usr/share/package-licenses/perl-Async-Interrupt/deblicense_copyright
+/usr/share/package-licenses/perl-Async-Interrupt/619cb1524f067eb222c60e4e1513035e67e1a874
+/usr/share/package-licenses/perl-Async-Interrupt/9a56f3b919dfc8fced3803e165a2e38de62646e5
+
+%files perl
+%defattr(-,root,root,-)
+/usr/lib/perl5/vendor_perl/5.28.2/x86_64-linux-thread-multi/Async/Interrupt.pm
+/usr/lib/perl5/vendor_perl/5.28.2/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
