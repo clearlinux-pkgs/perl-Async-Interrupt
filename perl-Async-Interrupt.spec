@@ -4,7 +4,7 @@
 #
 Name     : perl-Async-Interrupt
 Version  : 1.25
-Release  : 12
+Release  : 13
 URL      : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.25.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Async-Interrupt-1.25.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/liba/libasync-interrupt-perl/libasync-interrupt-perl_1.24-1.debian.tar.xz
@@ -85,7 +85,7 @@ make TEST_VERBOSE=1 test
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt
 cp %{_builddir}/Async-Interrupt-1.25/COPYING %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/9a56f3b919dfc8fced3803e165a2e38de62646e5
-cp %{_builddir}/Async-Interrupt-1.25/deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/619cb1524f067eb222c60e4e1513035e67e1a874
+cp %{_builddir}/debian/copyright %{buildroot}/usr/share/package-licenses/perl-Async-Interrupt/619cb1524f067eb222c60e4e1513035e67e1a874
 if test -f Makefile.PL; then
 make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
@@ -110,5 +110,5 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files perl
 %defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.30.1/x86_64-linux-thread-multi/Async/Interrupt.pm
-/usr/lib/perl5/vendor_perl/5.30.1/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
+/usr/lib/perl5/vendor_perl/5.30.2/x86_64-linux-thread-multi/Async/Interrupt.pm
+/usr/lib/perl5/vendor_perl/5.30.2/x86_64-linux-thread-multi/auto/Async/Interrupt/Interrupt.so
